@@ -15,6 +15,7 @@ import net.gazeplay.commons.configuration.Configuration;
 import net.gazeplay.commons.gamevariants.IGameVariant;
 import net.gazeplay.commons.utils.games.BackgroundMusicManager;
 import net.gazeplay.commons.utils.stats.Stats;
+import net.gazeplay.ui.scenes.errorhandlingui.GameWhereIsItConfigurableDialog;
 import net.gazeplay.ui.scenes.ingame.GameContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -46,13 +47,26 @@ public class GameMenuController {
             dialog.setAlwaysOnTop(true);
 
         } else {
-            if (variants.size() == 1) {
-                IGameVariant onlyGameVariant = variants.iterator().next();
-                chooseGame(gazePlay, gameSpec, onlyGameVariant);
-            } else {
-                chooseGame(gazePlay, gameSpec, null);
+            if(gameSpec.getGameSummary().getNameCode().equals("WhereIsItConfigurable")) {
+                whereIsItConfigurableErrorHandling(gazePlay, this, gameSpec, root);
+            }else {
+                if (variants.size() == 1) {
+                    IGameVariant onlyGameVariant = variants.iterator().next();
+                    chooseGame(gazePlay, gameSpec, onlyGameVariant);
+                } else {
+                    chooseGame(gazePlay, gameSpec, null);
+                }
             }
         }
+    }
+
+
+    private void whereIsItConfigurableErrorHandling(GazePlay gazePlay, GameMenuController gameMenuController, GameSpec gameSpec, Parent root) {
+        String whereIsItPromptLabel = "WhereIsItConfigurableDirectory";
+        GameWhereIsItConfigurableDialog whereIsItConfigurableDialog = new GameWhereIsItConfigurableDialog(gazePlay, gameMenuController, gazePlay.getPrimaryStage(), gameSpec, root, whereIsItPromptLabel);
+        //this.whereIsItConfigurableDialog.setTitle("error");
+        whereIsItConfigurableDialog.show();
+        whereIsItConfigurableDialog.toFront();
     }
 
     public void chooseGame(
