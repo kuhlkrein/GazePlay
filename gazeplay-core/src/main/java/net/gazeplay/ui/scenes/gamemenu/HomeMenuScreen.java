@@ -93,7 +93,7 @@ public class HomeMenuScreen extends GraphicalContext<BorderPane> {
 
         final List<GameSpec> games = gamesLocator.listGames(gazePlay.getTranslator());
 
-        CustomButton replayGameButton = createReplayGameButton(gazePlay, screenDimension, games);
+        // CustomButton replayGameButton = createReplayGameButton(gazePlay, screenDimension, games);
 
         GamesStatisticsPane gamesStatisticsPane = new GamesStatisticsPane(gazePlay.getTranslator(), games);
 
@@ -111,7 +111,7 @@ public class HomeMenuScreen extends GraphicalContext<BorderPane> {
         HBox topRightPane = new HBox();
         ControlPanelConfigurator.getSingleton().customizeControlPaneLayout(topRightPane);
         topRightPane.setAlignment(Pos.TOP_CENTER);
-        topRightPane.getChildren().addAll(replayGameButton, logoutButton, exitButton);
+        topRightPane.getChildren().addAll(/* replayGameButton,*/ logoutButton, exitButton);
 
         ProgressIndicator dwellTimeIndicator = new ProgressIndicator(0);
         Node gamePickerChoicePane = createGamePickerChoicePane(games, config, dwellTimeIndicator);

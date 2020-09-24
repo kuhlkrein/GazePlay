@@ -103,6 +103,17 @@ public class WhereIsItConfigurable implements GameLifeCycle {
         this.gameContext.startScoreLimiter();
         this.gameContext.startTimeLimiter();
     }
+    public WhereIsItConfigurable(final WhereIsItConfigurableGameType gameType, int level, final boolean fourThree,
+                                  final IGameContext gameContext, final Stats stats, double gameSeed) {
+        this.gameContext = gameContext;
+        this.gameType = gameType;
+        this.fourThree = fourThree;
+        this.stats = stats;
+        questionIndex = level;
+        this.targetAOIList = new ArrayList<>();
+        this.gameContext.startScoreLimiter();
+        this.gameContext.startTimeLimiter();
+    }
 
     @Override
     public void launch() {
