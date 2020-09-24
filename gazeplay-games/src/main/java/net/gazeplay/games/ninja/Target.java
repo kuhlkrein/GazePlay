@@ -56,7 +56,7 @@ public class Target extends Portrait {
 
 
     public Target(final IGameContext gameContext, final RandomPositionGenerator randomPositionGenerator, final Stats stats,
-                  final ImageLibrary imageLibrary, final NinjaGameVariant gameVariant, final Ninja gameInstance) {
+                  final ImageLibrary imageLibrary, final NinjaGameVariant gameVariant, final Ninja gameInstance, final ReplayablePseudoRandom randomGenerator) {
         super(radius, randomPositionGenerator, imageLibrary);
 
         this.gameInstance = gameInstance;
@@ -65,7 +65,7 @@ public class Target extends Portrait {
         this.stats = stats;
         this.imageLibrary = imageLibrary;
         this.gameVariant = gameVariant;
-        this.randomGen = new ReplayablePseudoRandom();
+        this.randomGen = randomGenerator;
         gameContext.startScoreLimiter();
         gameContext.startTimeLimiter();
 

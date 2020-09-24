@@ -180,6 +180,11 @@ public abstract class AbstractGazeDeviceManager implements GazeDeviceManager {
         }
     }
 
+    @Override
+    public void onSavedMovementsUpdate(Point2D gazePositionOnScreen) {
+        onGazeUpdate(gazePositionOnScreen);
+    }
+
     public void eventFire(double positionX, double positionY, GazeInfos gi, Node node) {
         if (!node.isDisable()) {
 

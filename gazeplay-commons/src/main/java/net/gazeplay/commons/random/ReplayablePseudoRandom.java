@@ -1,11 +1,14 @@
 package net.gazeplay.commons.random;
 
+import lombok.Getter;
+
 /**
  * @author Christophe El Zeinaty
  */
 
 public class ReplayablePseudoRandom {
 
+    @Getter
     private double seed;
 
     public ReplayablePseudoRandom() {

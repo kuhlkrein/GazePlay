@@ -139,7 +139,7 @@ public class MolesChar extends Parent {
     }
 
     /* This mole must go out */
-    void getOut() {
+    void getOut(ReplayablePseudoRandom random) {
 
         this.canGoOut = false;
 
@@ -163,8 +163,7 @@ public class MolesChar extends Parent {
             out = true;
 
             timeMoleOut = new Timeline(); // New time this mole go out
-            final ReplayablePseudoRandom r = new ReplayablePseudoRandom();
-            final int time = r.nextInt(timeMoleStayOut) + 2000;
+            final int time = random.nextInt(timeMoleStayOut) + 2000;
 
             timeMoleOut.getKeyFrames()
                 .add(new KeyFrame(new Duration(time),

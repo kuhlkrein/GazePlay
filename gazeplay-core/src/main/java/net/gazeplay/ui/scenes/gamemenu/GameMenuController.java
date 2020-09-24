@@ -12,6 +12,7 @@ import net.gazeplay.GameSpec;
 import net.gazeplay.GazePlay;
 import net.gazeplay.IGameLauncher;
 import net.gazeplay.commons.configuration.Configuration;
+import net.gazeplay.commons.ui.Translator;
 import net.gazeplay.commons.gamevariants.IGameVariant;
 import net.gazeplay.commons.utils.games.BackgroundMusicManager;
 import net.gazeplay.commons.utils.stats.Stats;
@@ -93,6 +94,19 @@ public class GameMenuController {
         }
 
         stats.start();
+
+        String gameVariantLabel;
+        Translator translator = gazePlay.getTranslator();
+        if (gameVariant != null){
+            gameVariantLabel = gameVariant.getLabel(translator);
+        }
+        else {
+            gameVariantLabel = null;
+        }
+
+        String gameNameCode = selectedGameSpec.getGameSummary().getNameCode();
+        stats.setGameVariant(gameVariantLabel, gameNameCode);
+
         currentGame.launch();
     }
 

@@ -16,6 +16,7 @@ import javafx.util.Duration;
 import net.gazeplay.GameLifeCycle;
 import net.gazeplay.IGameContext;
 import net.gazeplay.commons.configuration.Configuration;
+import net.gazeplay.commons.random.ReplayablePseudoRandom;
 import net.gazeplay.components.ProgressButton;
 
 import java.util.ArrayList;
@@ -46,6 +47,8 @@ public class BottleGame implements GameLifeCycle {
 
     private boolean isBroken;
 
+    private final ReplayablePseudoRandom randomGenerator;
+
     public BottleGame(IGameContext gameContext, BottleGameStats stats, int number) {
 
         this.bottleGameStats = stats;
@@ -61,6 +64,67 @@ public class BottleGame implements GameLifeCycle {
         this.middleLayer = new Group();
         this.foregroundLayer = new Group();
         gameContext.getChildren().addAll(backgroundLayer, middleLayer, foregroundLayer);
+
+        this.randomGenerator = new ReplayablePseudoRandom();
+        this.bottleGameStats.setGameSeed(randomGenerator.getSeed());
+
+        final Rectangle backgroundImage = new Rectangle(0, 0, dimension2D.getWidth(), dimension2D.getHeight());
+        backgroundImage.widthProperty().bind(gameContext.getRoot().widthProperty());
+        backgroundImage.heightProperty().bind(gameContext.getRoot().heightProperty());
+        backgroundImage.setFill(new ImagePattern(new Image("data/bottle/supermarket.jpg")));
+
+        backgroundLayer.getChildren().add(backgroundImage);
+
+        final int fixationLength = configuration.getFixationLength();
+
+        scoreText = new Text(0, 50, "0");
+        scoreText.setFill(Color.WHITE);
+        scoreText.setTextAlignment(TextAlignment.CENTER);
+        scoreText.setFont(new Font(50));
+        scoreText.setWrappingWidth(dimension2D.getWidth());
+        foregroundLayer.getChildren().add(scoreText);
+
+        shade = new Rectangle(0, 0, dimension2D.getWidth(), dimension2D.getHeight());
+        shade.setFill(new Color(0, 0, 0, 0.75));
+
+        restartButton = new ProgressButton();
+        final String dataPath = "data/space";
+        final ImageView restartImage = new ImageView(dataPath + "/menu/restart.png");
+        restartImage.setFitHeight(dimension2D.getHeight() / 6);
+        restartImage.setFitWidth(dimension2D.getHeight() / 6);
+        restartButton.setImage(restartImage);
+        restartButton.setLayoutX(dimension2D.getWidth() / 2 - dimension2D.getHeight() / 12);
+        restartButton.setLayoutY(dimension2D.getHeight() / 2 - dimension2D.getHeight() / 12);
+        restartButton.assignIndicator(event -> launch(), fixationLength);
+
+        finalScoreText = new Text(0, dimension2D.getHeight() / 4, "");
+        finalScoreText.setFill(Color.WHITE);
+        finalScoreText.setTextAlignment(TextAlignment.CENTER);
+        finalScoreText.setFont(new Font(50));
+        finalScoreText.setWrappingWidth(dimension2D.getWidth());
+        foregroundLayer.getChildren().addAll(shade, finalScoreText, restartButton);
+
+        gameContext.getGazeDeviceManager().addEventFilter(restartButton);
+
+    }
+
+    public BottleGame(IGameContext gameContext, BottleGameStats stats, int number, double gameSeed) {
+
+        this.bottleGameStats = stats;
+        this.gameContext = gameContext;
+        this.dimension2D = gameContext.getGamePanelDimensionProvider().getDimension2D();
+        this.configuration = gameContext.getConfiguration();
+
+        this.bottle = new ArrayList<>();
+        this.nbBottle = number;
+
+        this.isBroken = false;
+        this.backgroundLayer = new Group();
+        this.middleLayer = new Group();
+        this.foregroundLayer = new Group();
+        gameContext.getChildren().addAll(backgroundLayer, middleLayer, foregroundLayer);
+
+        this.randomGenerator = new ReplayablePseudoRandom(gameSeed);
 
         final Rectangle backgroundImage = new Rectangle(0, 0, dimension2D.getWidth(), dimension2D.getHeight());
         backgroundImage.widthProperty().bind(gameContext.getRoot().widthProperty());

@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.gazeplay.GameCategories;
 import net.gazeplay.GameSpec;
 import net.gazeplay.GazePlay;
+import net.gazeplay.ReplayingGameFromJson;
 import net.gazeplay.commons.app.LogoFactory;
 import net.gazeplay.commons.configuration.ActiveConfigurationContext;
 import net.gazeplay.commons.configuration.Configuration;
@@ -38,6 +39,8 @@ import net.gazeplay.commons.utils.games.MenuUtils;
 import net.gazeplay.gameslocator.GamesLocator;
 import net.gazeplay.ui.GraphicalContext;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
@@ -90,6 +93,8 @@ public class HomeMenuScreen extends GraphicalContext<BorderPane> {
 
         final List<GameSpec> games = gamesLocator.listGames(gazePlay.getTranslator());
 
+        CustomButton replayGameButton = createReplayGameButton(gazePlay, screenDimension, games);
+
         GamesStatisticsPane gamesStatisticsPane = new GamesStatisticsPane(gazePlay.getTranslator(), games);
 
         BorderPane bottomPane = new BorderPane();
@@ -106,7 +111,7 @@ public class HomeMenuScreen extends GraphicalContext<BorderPane> {
         HBox topRightPane = new HBox();
         ControlPanelConfigurator.getSingleton().customizeControlPaneLayout(topRightPane);
         topRightPane.setAlignment(Pos.TOP_CENTER);
-        topRightPane.getChildren().addAll(logoutButton, exitButton);
+        topRightPane.getChildren().addAll(replayGameButton, logoutButton, exitButton);
 
         ProgressIndicator dwellTimeIndicator = new ProgressIndicator(0);
         Node gamePickerChoicePane = createGamePickerChoicePane(games, config, dwellTimeIndicator);
@@ -358,6 +363,19 @@ public class HomeMenuScreen extends GraphicalContext<BorderPane> {
         CustomButton logoutButton = new CustomButton("data/common/images/logout.png", screenDimension);
         logoutButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (EventHandler<Event>) e -> gazePlay.goToUserPage());
         return logoutButton;
+    }
+
+    private CustomButton createReplayGameButton(GazePlay gazePlay, Dimension2D screenDimension, List<GameSpec> games) {
+        CustomButton replayButton = new CustomButton("data/common/images/logout.png", screenDimension);
+        replayButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (EventHandler<Event>) e -> {
+            try {
+                ReplayingGameFromJson replayingGame = new ReplayingGameFromJson(gazePlay, gameMenuFactory.getApplicationContext(), games);
+                replayingGame.pickJSONFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+        return replayButton;
     }
 
     private CheckBox buildCategoryCheckBox(
