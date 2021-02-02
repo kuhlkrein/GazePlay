@@ -34,6 +34,7 @@ public class Egg extends Parent {
 
     private int turnNumber = 0;
     private final int totalNumberOfTurns;
+    private final String position;
 
     private final ProgressIndicator progressIndicator;
 
@@ -43,16 +44,34 @@ public class Egg extends Parent {
     private final EventHandler<Event> enterEvent;
 
     public Egg(final IGameContext gameContext, final Stats stats,
-               final EggGame gameInstance, final int fixationlength, final int numberOfTurn) {
+               final EggGame gameInstance, final int fixationlength, final int numberOfTurn, final String position) {
 
         this.totalNumberOfTurns = numberOfTurn;
+        this.position = position;
 
         final Scene scene = gameContext.getPrimaryScene();
         final double height = scene.getHeight() / 2;
         final double width = 3. * height / 4.;
 
-        final double positionX = scene.getWidth() / 2 - width / 2;
-        final double positionY = scene.getHeight() / 2 - height / 2;
+        double positionX, positionY;
+
+        if( position.contains("TOP")){
+            positionY = 0;
+        } else if (position.contains( "BOTTOM")){
+            positionY = scene.getHeight()  - height;
+        }else { //if (position.contains("CENTER")){
+            positionY = scene.getHeight() / 2 - height / 2;
+        }
+
+        if( position.contains("LEFT")){
+            positionX = 0;
+        } else if (position.contains( "RIGHT")){
+            positionX = scene.getWidth() - width;
+        } else { //if (position.contains("MIDDLE")){
+            positionX = scene.getWidth() / 2 - width / 2;
+        }
+
+        log.info("X = " + positionX + " & Y = " + positionY);
 
         this.cards = new StackPane();
         this.cards.setLayoutX(positionX);
@@ -62,8 +81,24 @@ public class Egg extends Parent {
 
         this.cards.prefHeightProperty().bind(scene.heightProperty().divide(2d));
         this.cards.prefWidthProperty().bind(this.cards.heightProperty().multiply(3d).divide(4d));
-        this.cards.layoutXProperty().bind(scene.widthProperty().divide(2d).subtract(this.cards.widthProperty().divide(2d)));
-        this.cards.layoutYProperty().bind(scene.heightProperty().divide(2d).subtract(this.cards.heightProperty().divide(2d)));
+
+
+        if( position.contains("TOP")){
+            this.cards.layoutYProperty().bind(scene.heightProperty().multiply(0));
+        } else if (position.contains( "BOTTOM")){
+            this.cards.layoutYProperty().bind(scene.heightProperty().divide(2d).subtract(this.cards.heightProperty().divide(2d)));
+        }else { //if (position.contains("CENTER")){
+            this.cards.layoutYProperty().bind(scene.heightProperty().subtract(this.cards.heightProperty()));
+
+        }
+
+        if( position.contains("LEFT")){
+            this.cards.layoutXProperty().bind(scene.widthProperty().multiply(0));
+        } else if (position.contains( "RIGHT")){
+            this.cards.layoutXProperty().bind(scene.widthProperty().subtract(this.cards.widthProperty()));
+        } else { //if (position.contains("MIDDLE")){
+            this.cards.layoutXProperty().bind(scene.widthProperty().divide(2d).subtract(this.cards.widthProperty().divide(2d)));
+        }
 
         final Rectangle image1 = new Rectangle(positionX, positionY, width, height);
         image1.setFill(new ImagePattern(new Image("data/egg/images/egg1.jpg"), 0, 0, 1, 1, true));

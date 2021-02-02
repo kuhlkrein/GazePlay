@@ -1,10 +1,12 @@
 package net.gazeplay.games.egg;
 
 import javafx.scene.Scene;
+import lombok.extern.slf4j.Slf4j;
 import net.gazeplay.GameLifeCycle;
 import net.gazeplay.IGameContext;
 import net.gazeplay.IGameLauncher;
 import net.gazeplay.commons.gamevariants.IntGameVariant;
+import net.gazeplay.commons.gamevariants.IntStringGameVariant;
 import net.gazeplay.commons.utils.stats.Stats;
 import net.gazeplay.commons.utils.FixationPoint;
 import net.gazeplay.commons.utils.stats.LifeCycle;
@@ -14,7 +16,8 @@ import net.gazeplay.commons.utils.stats.SavedStatsInfo;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class EggGameGameLauncher implements IGameLauncher<Stats, IntGameVariant> {
+@Slf4j
+public class EggGameGameLauncher implements IGameLauncher<Stats, IntStringGameVariant> {
     @Override
     public Stats createNewStats(Scene scene) {
         return new EggGameStats(scene);
@@ -26,14 +29,21 @@ public class EggGameGameLauncher implements IGameLauncher<Stats, IntGameVariant>
     }
 
     @Override
-    public GameLifeCycle createNewGame(IGameContext gameContext, IntGameVariant gameVariant,
+    public GameLifeCycle createNewGame(IGameContext gameContext, IntStringGameVariant gameVariant,
                                        Stats stats) {
-        return new EggGame(gameContext, stats, gameVariant.getNumber());
+        return new EggGame(gameContext,
+            stats,
+            gameVariant.getNumber(),
+            gameVariant.getStringValue());
     }
 
     @Override
-    public GameLifeCycle replayGame(IGameContext gameContext, IntGameVariant gameVariant,
+    public GameLifeCycle replayGame(IGameContext gameContext, IntStringGameVariant gameVariant,
                                        Stats stats, double gameSeed) {
-        return new EggGame(gameContext, stats, gameVariant.getNumber(), gameSeed);
+        return new EggGame(gameContext,
+            stats,
+            gameVariant.getNumber(),
+            gameVariant.getStringValue(),
+            gameSeed);
     }
 }
