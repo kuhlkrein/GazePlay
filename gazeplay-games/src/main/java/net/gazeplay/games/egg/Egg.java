@@ -86,10 +86,9 @@ public class Egg extends Parent {
         if( position.contains("TOP")){
             this.cards.layoutYProperty().bind(scene.heightProperty().multiply(0));
         } else if (position.contains( "BOTTOM")){
-            this.cards.layoutYProperty().bind(scene.heightProperty().divide(2d).subtract(this.cards.heightProperty().divide(2d)));
-        }else { //if (position.contains("CENTER")){
             this.cards.layoutYProperty().bind(scene.heightProperty().subtract(this.cards.heightProperty()));
-
+            }else { //if (position.contains("CENTER")){
+             this.cards.layoutYProperty().bind(scene.heightProperty().divide(2d).subtract(this.cards.heightProperty().divide(2d)));
         }
 
         if( position.contains("LEFT")){

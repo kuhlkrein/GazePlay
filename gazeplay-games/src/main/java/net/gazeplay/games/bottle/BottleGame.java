@@ -41,6 +41,7 @@ public class BottleGame implements GameLifeCycle {
     private final Text scoreText;
     private int score;
     private int nbBottle;
+    private String contrastStyle;
 
     private boolean isBroken;
 
@@ -48,7 +49,7 @@ public class BottleGame implements GameLifeCycle {
 
     Image brokenBottle = new Image("data/bottle/broken.png");
 
-    public BottleGame(IGameContext gameContext, BottleGameStats stats, int number) {
+    public BottleGame(IGameContext gameContext, BottleGameStats stats, int number, String contrastStyleValue) {
 
         this.bottleGameStats = stats;
         this.gameContext = gameContext;
@@ -57,6 +58,7 @@ public class BottleGame implements GameLifeCycle {
 
         this.bottle = new ArrayList<>();
         this.nbBottle = number;
+        this.contrastStyle = contrastStyleValue;
 
         this.isBroken = false;
         this.backgroundLayer = new Group();
@@ -106,7 +108,7 @@ public class BottleGame implements GameLifeCycle {
 
     }
 
-    public BottleGame(IGameContext gameContext, BottleGameStats stats, int number, double gameSeed) {
+    public BottleGame(IGameContext gameContext, BottleGameStats stats, int number, String contrastValue, double gameSeed) {
 
         this.bottleGameStats = stats;
         this.gameContext = gameContext;

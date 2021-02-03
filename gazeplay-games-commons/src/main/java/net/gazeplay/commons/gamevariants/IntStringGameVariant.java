@@ -1,18 +1,40 @@
 package net.gazeplay.commons.gamevariants;
 
 import lombok.Data;
+import lombok.Getter;
 import net.gazeplay.commons.gamevariants.IGameVariant;
 import net.gazeplay.commons.ui.Translator;
 
-@Data
 public class IntStringGameVariant implements IGameVariant {
 
+    @Getter
     private final int number;
+    @Getter
     private final String stringValue;
+
+    public IntStringGameVariant(int number, String stringValue){
+        this.number = number;
+        this.stringValue = stringValue;
+    }
+
+    public static String[] positions = new String[]{
+        "TOPLEFT",
+        "TOPCENTER",
+        "TOPRIGHT",
+        "MIDDLELEFT",
+        "MIDDLECENTER",
+        "MIDDLERIGHT",
+        "BOTTOMLEFT",
+        "BOTTOMCENTER",
+        "BOTTOMRIGHT"};
+
+    public static String[] contrastStyles = new String[]{
+        "NORMAL","HIGHT"
+    };
 
     @Override
     public String getLabel(final Translator translator) {
-        return number + " " + stringValue;
+        return number + " \n " + translator.translate(stringValue) ;
     }
 
     @Override
