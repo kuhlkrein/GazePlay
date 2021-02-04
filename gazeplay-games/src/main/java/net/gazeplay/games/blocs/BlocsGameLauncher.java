@@ -5,11 +5,11 @@ import net.gazeplay.GameLifeCycle;
 import net.gazeplay.IGameContext;
 import net.gazeplay.IGameLauncher;
 import net.gazeplay.commons.gamevariants.DimensionGameVariant;
-import net.gazeplay.commons.utils.stats.Stats;
 import net.gazeplay.commons.utils.FixationPoint;
 import net.gazeplay.commons.utils.stats.LifeCycle;
 import net.gazeplay.commons.utils.stats.RoundsDurationReport;
 import net.gazeplay.commons.utils.stats.SavedStatsInfo;
+import net.gazeplay.commons.utils.stats.Stats;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -31,9 +31,10 @@ public class BlocsGameLauncher implements IGameLauncher<Stats, DimensionGameVari
         return new Blocs(gameContext, gameVariant.getWidth(), gameVariant.getHeight(), true, 1, false,
             stats);
     }
+
     @Override
     public GameLifeCycle replayGame(IGameContext gameContext,
-                                       DimensionGameVariant gameVariant, Stats stats, double gameSeed) {
+                                    DimensionGameVariant gameVariant, Stats stats, double gameSeed) {
         return new Blocs(gameContext, gameVariant.getWidth(), gameVariant.getHeight(), true, 1, false,
             stats, gameSeed);
     }

@@ -1,8 +1,6 @@
 package net.gazeplay.commons.gamevariants;
 
-import lombok.Data;
 import lombok.Getter;
-import net.gazeplay.commons.gamevariants.IGameVariant;
 import net.gazeplay.commons.ui.Translator;
 
 public class IntStringGameVariant implements IGameVariant {
@@ -12,7 +10,7 @@ public class IntStringGameVariant implements IGameVariant {
     @Getter
     private final String stringValue;
 
-    public IntStringGameVariant(int number, String stringValue){
+    public IntStringGameVariant(int number, String stringValue) {
         this.number = number;
         this.stringValue = stringValue;
     }
@@ -29,15 +27,16 @@ public class IntStringGameVariant implements IGameVariant {
         "BOTTOMRIGHT"};
 
     public static String[] contrastStyles = new String[]{
-        "NORMAL","HIGH"
+        "NORMAL", "HIGH"
     };
 
     @Override
     public String getLabel(final Translator translator) {
-        return number + " \n " + translator.translate(stringValue) ;
+        return number + " \n " + translator.translate(stringValue);
     }
 
     @Override
-    public String toString() { return "IntStringGameVariant:" + number  + ":" + stringValue;
+    public String toString() {
+        return "IntStringGameVariant:" + number + ":" + stringValue;
     }
 }

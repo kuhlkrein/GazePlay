@@ -55,17 +55,17 @@ public class Egg extends Parent {
 
         double positionX, positionY;
 
-        if( position.contains("TOP")){
+        if (position.contains("TOP")) {
             positionY = 0;
-        } else if (position.contains( "BOTTOM")){
-            positionY = scene.getHeight()  - height;
-        }else { //if (position.contains("CENTER")){
+        } else if (position.contains("BOTTOM")) {
+            positionY = scene.getHeight() - height;
+        } else { //if (position.contains("CENTER")){
             positionY = scene.getHeight() / 2 - height / 2;
         }
 
-        if( position.contains("LEFT")){
+        if (position.contains("LEFT")) {
             positionX = 0;
-        } else if (position.contains( "RIGHT")){
+        } else if (position.contains("RIGHT")) {
             positionX = scene.getWidth() - width;
         } else { //if (position.contains("MIDDLE")){
             positionX = scene.getWidth() / 2 - width / 2;
@@ -83,17 +83,17 @@ public class Egg extends Parent {
         this.cards.prefWidthProperty().bind(this.cards.heightProperty().multiply(3d).divide(4d));
 
 
-        if( position.contains("TOP")){
+        if (position.contains("TOP")) {
             this.cards.layoutYProperty().bind(scene.heightProperty().multiply(0));
-        } else if (position.contains( "BOTTOM")){
+        } else if (position.contains("BOTTOM")) {
             this.cards.layoutYProperty().bind(scene.heightProperty().subtract(this.cards.heightProperty()));
-            }else { //if (position.contains("CENTER")){
-             this.cards.layoutYProperty().bind(scene.heightProperty().divide(2d).subtract(this.cards.heightProperty().divide(2d)));
+        } else { //if (position.contains("CENTER")){
+            this.cards.layoutYProperty().bind(scene.heightProperty().divide(2d).subtract(this.cards.heightProperty().divide(2d)));
         }
 
-        if( position.contains("LEFT")){
+        if (position.contains("LEFT")) {
             this.cards.layoutXProperty().bind(scene.widthProperty().multiply(0));
-        } else if (position.contains( "RIGHT")){
+        } else if (position.contains("RIGHT")) {
             this.cards.layoutXProperty().bind(scene.widthProperty().subtract(this.cards.widthProperty()));
         } else { //if (position.contains("MIDDLE")){
             this.cards.layoutXProperty().bind(scene.widthProperty().divide(2d).subtract(this.cards.widthProperty().divide(2d)));
@@ -207,7 +207,7 @@ public class Egg extends Parent {
 
                             t.setOnFinished(actionEvent1 -> {
 
-                                gameContext.updateScore(stats,gameInstance);
+                                gameContext.updateScore(stats, gameInstance);
 
                                 gameContext.playWinTransition(0, event -> {
                                     gameInstance.dispose();

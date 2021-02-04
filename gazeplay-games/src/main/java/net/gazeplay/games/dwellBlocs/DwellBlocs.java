@@ -157,7 +157,7 @@ public class DwellBlocs implements GameLifeCycle {
                     final Color c = gameContext.getConfiguration().getBackgroundStyle().accept(new BackgroundStyleVisitor<Color>() {
                         @Override
                         public Color visitLight() {
-                           return Color.WHITE;
+                            return Color.WHITE;
                         }
 
                         @Override
@@ -221,12 +221,11 @@ public class DwellBlocs implements GameLifeCycle {
 
         return e -> {
 
-            if(! (e.getTarget() instanceof  StackBloc))
-            {
-                return ;
+            if (!(e.getTarget() instanceof StackBloc)) {
+                return;
             }
 
-            StackBloc element = ((StackBloc)e.getTarget());
+            StackBloc element = ((StackBloc) e.getTarget());
 
             if (e.getEventType() == MouseEvent.MOUSE_ENTERED || e.getEventType() == GazeEvent.GAZE_ENTERED) {
 
@@ -307,15 +306,15 @@ public class DwellBlocs implements GameLifeCycle {
 
         final Bloc bloc;
 
-        StackBloc(final double x, final double y, final double width, final double height, final int posX, final int posY){
+        StackBloc(final double x, final double y, final double width, final double height, final int posX, final int posY) {
             super();
-            this.bloc = new Bloc(0,0,width,height,posX,posY);
+            this.bloc = new Bloc(0, 0, width, height, posX, posY);
             this.getChildren().add(bloc);
             this.setLayoutX(x);
             this.setLayoutY(y);
         }
 
-        public void setFill(Paint value){
+        public void setFill(Paint value) {
             bloc.setFill(value);
         }
     }

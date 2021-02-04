@@ -27,12 +27,10 @@ import net.gazeplay.commons.gamevariants.IntStringGameVariant;
 import net.gazeplay.commons.ui.I18NLabel;
 import net.gazeplay.commons.ui.Translator;
 import net.gazeplay.components.CssUtil;
-import net.gazeplay.ui.scenes.errorhandlingui.GameWhereIsItErrorPathDialog;
 import net.gazeplay.ui.scenes.errorhandlingui.GameWhereIsItConfigurableDialog;
+import net.gazeplay.ui.scenes.errorhandlingui.GameWhereIsItErrorPathDialog;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
 
@@ -63,8 +61,8 @@ public class GameVariantDialog extends Stage {
             root.setDisable(false);
         });
 
-        HashMap<Integer,FlowPane> choicePanes = new HashMap<>();
-        choicePanes.put(0,createFlowPane());
+        HashMap<Integer, FlowPane> choicePanes = new HashMap<>();
+        choicePanes.put(0, createFlowPane());
 
         ScrollPane choicePanelScroller = new ScrollPane();
         choicePanelScroller.setContent(choicePanes.get(0));
@@ -89,6 +87,10 @@ public class GameVariantDialog extends Stage {
         final Translator translator = gazePlay.getTranslator();
 
         HBox bottom = new HBox();
+        bottom.prefWidthProperty().bind(sceneContentPane.widthProperty());
+        bottom.setAlignment(Pos.CENTER);
+        bottom.setSpacing(50);
+
         for (IGameVariant variant : gameSpec.getGameVariantGenerator().getVariants()) {
             Button button = new Button(variant.getLabel(translator));
             button.getStyleClass().add("gameChooserButton");
@@ -107,22 +109,22 @@ public class GameVariantDialog extends Stage {
             button.setMaxHeight(primaryStage.getHeight() / 8);
 
             if (variant instanceof DimensionDifficultyGameVariant) {
-                if(!choicePanes.containsKey(1)){
-                    choicePanes.put(1,createFlowPane());
+                if (!choicePanes.containsKey(1)) {
+                    choicePanes.put(1, createFlowPane());
                 }
                 choicePanes.get(1).getChildren().add(button);
-            } else if(variant instanceof IntStringGameVariant) {
-                if(gameSpec.getGameSummary().getNameCode().equals("bottle")){
+            } else if (variant instanceof IntStringGameVariant) {
+                if (gameSpec.getGameSummary().getNameCode().equals("bottle")) {
                     button.setTextAlignment(TextAlignment.CENTER);
                     if (!choicePanes.containsKey(1)) {
                         choicePanes.put(1, createFlowPane());
                     }
-                    if(((IntStringGameVariant) variant).getStringValue().contains("NORMAL")) {
+                    if (((IntStringGameVariant) variant).getStringValue().contains("NORMAL")) {
                         choicePanes.get(0).getChildren().add(button);
                     } else {
                         choicePanes.get(1).getChildren().add(button);
                     }
-                }else {
+                } else {
                     button.setTextAlignment(TextAlignment.CENTER);
                     int number = ((IntStringGameVariant) variant).getNumber();
 
@@ -131,8 +133,8 @@ public class GameVariantDialog extends Stage {
                     }
                     choicePanes.get(number).getChildren().add(button);
                 }
-            }else{
-                    choicePanes.get(0).getChildren().add(button);
+            } else {
+                choicePanes.get(0).getChildren().add(button);
             }
 
             if (gameSpec.getGameSummary().getNameCode().equals("WhereIsTheColor") || gameSpec.getGameSummary().getNameCode().equals("bottle")) {
@@ -140,9 +142,9 @@ public class GameVariantDialog extends Stage {
                     variant = new DimensionDifficultyGameVariant(((DimensionGameVariant) variant).getWidth(), ((DimensionGameVariant) variant).getHeight(), "normal");
                 }
 
-                if(group.getToggles().size()<2){
+                if (group.getToggles().size() < 2) {
                     RadioButton normal, facile;
-                    if(gameSpec.getGameSummary().getNameCode().equals("WhereIsTheColor")) {
+                    if (gameSpec.getGameSummary().getNameCode().equals("WhereIsTheColor")) {
                         normal = new RadioButton("normal");
                         facile = new RadioButton("easy");
                     } else {
@@ -158,13 +160,13 @@ public class GameVariantDialog extends Stage {
                     bottom.getChildren().add(normal);
                     sceneContentPane.setBottom(bottom);
                     facile.setOnAction(actionEvent -> {
-                        if (easymode!=1) {
+                        if (easymode != 1) {
                             easymode = 1;
                             choicePanelScroller.setContent(choicePanes.get(1));
                         }
                     });
                     normal.setOnAction(actionEvent -> {
-                        if (easymode!=0) {
+                        if (easymode != 0) {
                             easymode = 0;
                             choicePanelScroller.setContent(choicePanes.get(0));
                         }
@@ -172,36 +174,36 @@ public class GameVariantDialog extends Stage {
                 }
 
             } else if (gameSpec.getGameSummary().getNameCode().equals("EggGame")) {
-                int number = ((IntStringGameVariant)variant).getNumber();
+                int number = ((IntStringGameVariant) variant).getNumber();
 
                 RadioButton normal = new RadioButton("" + number);
-                    boolean toggleAlreadyExist = false;
-                    for(Toggle toggle : group.getToggles()) {
-                        if (((RadioButton) toggle).getText().equals(""+number)){
-                            normal = ((RadioButton) toggle);
-                            toggleAlreadyExist = true;
-                            break;
+                boolean toggleAlreadyExist = false;
+                for (Toggle toggle : group.getToggles()) {
+                    if (((RadioButton) toggle).getText().equals("" + number)) {
+                        normal = ((RadioButton) toggle);
+                        toggleAlreadyExist = true;
+                        break;
+                    }
+                }
+
+                if (!toggleAlreadyExist) {
+                    normal.setToggleGroup(group);
+
+                    group.getToggles().get(0).setSelected(true);
+                    RadioButton main = ((RadioButton) group.getToggles().get(0));
+                    easymode = Integer.parseInt(main.getText());
+                    choicePanelScroller.setContent(choicePanes.get(easymode));
+
+
+                    bottom.getChildren().add(normal);
+                    sceneContentPane.setBottom(bottom);
+                    normal.setOnAction(actionEvent -> {
+                        if (easymode != number) {
+                            easymode = number;
+                            choicePanelScroller.setContent(choicePanes.get(number));
                         }
-                    }
-
-                    if(!toggleAlreadyExist) {
-                        normal.setToggleGroup(group);
-
-                        group.getToggles().get(0).setSelected(true);
-                        RadioButton main = ((RadioButton) group.getToggles().get(0));
-                        easymode = Integer.parseInt(main.getText());
-                        choicePanelScroller.setContent(choicePanes.get(easymode));
-
-
-                        bottom.getChildren().add(normal);
-                        sceneContentPane.setBottom(bottom);
-                        normal.setOnAction(actionEvent -> {
-                            if (easymode != number) {
-                                easymode = number;
-                                choicePanelScroller.setContent(choicePanes.get(number));
-                            }
-                        });
-                    }
+                    });
+                }
 
             }
 
@@ -238,7 +240,7 @@ public class GameVariantDialog extends Stage {
     }
 
 
-    private FlowPane createFlowPane(){
+    private FlowPane createFlowPane() {
         FlowPane newFlowPane = new FlowPane();
         newFlowPane.setAlignment(Pos.CENTER);
         newFlowPane.setHgap(10);

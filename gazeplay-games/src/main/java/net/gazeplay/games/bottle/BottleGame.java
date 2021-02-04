@@ -179,12 +179,12 @@ public class BottleGame implements GameLifeCycle {
         updateScore();
         bottle.clear();
 
-        if( this.contrastStyle.equals("NORMAL")) {
+        if (this.contrastStyle.equals("NORMAL")) {
             gameContext.getChildren().addAll(backgroundLayer, foregroundLayer);
         }
 
         double bottleHeight, bottlewidth;
-        if(contrastStyle.equals("NORMAL")) {
+        if (contrastStyle.equals("NORMAL")) {
             bottleHeight = dimension2D.getHeight() / 6d;
             bottlewidth = dimension2D.getWidth() / 12d;
         } else {
@@ -195,7 +195,7 @@ public class BottleGame implements GameLifeCycle {
         initBall();
         initBar(bottleHeight);
 
-        createBottle(nbBottle,bottleHeight,bottlewidth);
+        createBottle(nbBottle, bottleHeight, bottlewidth);
 
         gameContext.getChildren().add(ball);
 
@@ -210,7 +210,7 @@ public class BottleGame implements GameLifeCycle {
     }
 
     private void initBar(double bottleHeight) {
-        if (contrastStyle.equals("NORMAL")){
+        if (contrastStyle.equals("NORMAL")) {
             bar1 = new Rectangle(dimension2D.getWidth() / 10, dimension2D.getHeight() / 7 + bottleHeight, dimension2D.getWidth() * 8 / 10, dimension2D.getHeight() / 20);
             bar2 = new Rectangle(dimension2D.getWidth() / 10, dimension2D.getHeight() / 7 + dimension2D.getHeight() / 3.5 + bottleHeight, dimension2D.getWidth() * 8 / 10, dimension2D.getHeight() / 20);
         } else {
