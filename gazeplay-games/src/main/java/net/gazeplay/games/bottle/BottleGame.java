@@ -3,6 +3,7 @@ package net.gazeplay.games.bottle;
 import javafx.animation.*;
 import javafx.geometry.Dimension2D;
 import javafx.scene.Group;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -38,10 +39,11 @@ public class BottleGame implements GameLifeCycle {
     private ArrayList<ProgressButton> bottle;
 
     private Circle ball;
+    private Rectangle bar1, bar2;
     private final Text scoreText;
     private int score;
     private int nbBottle;
-    private String contrastStyle;
+    private final String contrastStyle;
 
     private boolean isBroken;
 
@@ -108,7 +110,7 @@ public class BottleGame implements GameLifeCycle {
 
     }
 
-    public BottleGame(IGameContext gameContext, BottleGameStats stats, int number, String contrastValue, double gameSeed) {
+    public BottleGame(IGameContext gameContext, BottleGameStats stats, int number, String contrastStyleValue, double gameSeed) {
 
         this.bottleGameStats = stats;
         this.gameContext = gameContext;
@@ -117,6 +119,7 @@ public class BottleGame implements GameLifeCycle {
 
         this.bottle = new ArrayList<>();
         this.nbBottle = number;
+        this.contrastStyle = contrastStyleValue;
 
         this.isBroken = false;
         this.backgroundLayer = new Group();
@@ -176,16 +179,25 @@ public class BottleGame implements GameLifeCycle {
         updateScore();
         bottle.clear();
 
-        gameContext.getChildren().addAll(backgroundLayer, foregroundLayer);
+        if( this.contrastStyle.equals("NORMAL")) {
+            gameContext.getChildren().addAll(backgroundLayer, foregroundLayer);
+        }
+
+        double bottleHeight, bottlewidth;
+        if(contrastStyle.equals("NORMAL")) {
+            bottleHeight = dimension2D.getHeight() / 6d;
+            bottlewidth = dimension2D.getWidth() / 12d;
+        } else {
+            bottleHeight = dimension2D.getHeight() / 3d;
+            bottlewidth = dimension2D.getWidth() / 6d;
+        }
 
         initBall();
+        initBar(bottleHeight);
 
-        createBottle(nbBottle);
+        createBottle(nbBottle,bottleHeight,bottlewidth);
 
         gameContext.getChildren().add(ball);
-
-        initBar();
-
 
         bottleGameStats.notifyNewRoundReady();
         gameContext.getGazeDeviceManager().addStats(bottleGameStats);
@@ -197,32 +209,35 @@ public class BottleGame implements GameLifeCycle {
         ball.setVisible(false);
     }
 
-    private void initBar() {
-        Rectangle bar1 = new Rectangle(dimension2D.getWidth() / 10, dimension2D.getHeight() / 7 + dimension2D.getHeight() / 6, dimension2D.getWidth() * 8 / 10, dimension2D.getHeight() / 20);
+    private void initBar(double bottleHeight) {
+        if (contrastStyle.equals("NORMAL")){
+            bar1 = new Rectangle(dimension2D.getWidth() / 10, dimension2D.getHeight() / 7 + bottleHeight, dimension2D.getWidth() * 8 / 10, dimension2D.getHeight() / 20);
+            bar2 = new Rectangle(dimension2D.getWidth() / 10, dimension2D.getHeight() / 7 + dimension2D.getHeight() / 3.5 + bottleHeight, dimension2D.getWidth() * 8 / 10, dimension2D.getHeight() / 20);
+        } else {
+            bar1 = new Rectangle(0, dimension2D.getHeight() / 10 + bottleHeight, dimension2D.getWidth(), dimension2D.getHeight() / 20);
+            bar2 = new Rectangle(0, dimension2D.getHeight() / 10 + dimension2D.getHeight() / 2.2 + bottleHeight, dimension2D.getWidth(), dimension2D.getHeight() / 20);
+        }
+
         bar1.setFill(new ImagePattern(new Image("data/bottle/etagere.png")));
-        Rectangle bar2 = new Rectangle(dimension2D.getWidth() / 10, dimension2D.getHeight() / 7 + dimension2D.getHeight() / 3.5 + dimension2D.getHeight() / 6, dimension2D.getWidth() * 8 / 10, dimension2D.getHeight() / 20);
         bar2.setFill(new ImagePattern(new Image("data/bottle/etagere.png")));
         backgroundLayer.getChildren().addAll(bar1, bar2);
         gameContext.getChildren().addAll(bar1, bar2);
     }
 
-    private void createBottle(final int nb) {
+    private void createBottle(final int nb, double bottleHeight, double bottlewidth) {
         ProgressButton b;
         double x;
         double y;
         double bottlePerLine = nb / 2d;
-        double sideOffset = dimension2D.getWidth() / 10d;
+        double sideOffset = bar1.getX();
         double spaceBetweeBottle = (dimension2D.getWidth() - 2 * sideOffset) / (bottlePerLine + 1);
-
-        double bottlewidth = dimension2D.getWidth() / 12;
-
 
         for (int i = 0; i < nb; i++) {
             x = sideOffset + ((i % bottlePerLine) + 1) * spaceBetweeBottle - bottlewidth / 2;
             if (i < bottlePerLine) {
-                y = dimension2D.getHeight() / 7d;
+                y = bar1.getY() - bottleHeight;
             } else {
-                y = dimension2D.getHeight() / 7d + dimension2D.getHeight() / 3.5;
+                y = bar2.getY() - bottleHeight;
             }
             b = new ProgressButton();
             b.setLayoutX(x);
@@ -233,10 +248,20 @@ public class BottleGame implements GameLifeCycle {
         }
 
         Image bottleImage = new Image("data/bottle/bottle.png");
+
+        ColorAdjust color_adjust = new ColorAdjust();
+
+        // set hue, saturation, brightness, and contrast
+        color_adjust.setHue(0.4);
+        color_adjust.setBrightness(0.6);
+        color_adjust.setContrast(0.8);
+        color_adjust.setSaturation(0.1);
+
         for (final ProgressButton bo : bottle) {
             ImageView bottleI = new ImageView(bottleImage);
             bottleI.setFitWidth(bottlewidth);
-            bottleI.setFitHeight(dimension2D.getHeight() / 6);
+            bottleI.setFitHeight(bottleHeight);
+            bottleI.setEffect(color_adjust);
             bo.setImage(bottleI);
 
             gameContext.getChildren().add(bo);

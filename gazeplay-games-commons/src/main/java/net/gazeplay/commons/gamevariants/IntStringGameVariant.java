@@ -29,7 +29,7 @@ public class IntStringGameVariant implements IGameVariant {
         "BOTTOMRIGHT"};
 
     public static String[] contrastStyles = new String[]{
-        "NORMAL","HIGHT"
+        "NORMAL","HIGH"
     };
 
     @Override
