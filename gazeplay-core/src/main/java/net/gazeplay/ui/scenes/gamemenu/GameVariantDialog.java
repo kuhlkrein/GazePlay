@@ -141,10 +141,17 @@ public class GameVariantDialog extends Stage {
                 }
 
                 if(group.getToggles().size()<2){
-                    RadioButton normal = new RadioButton("normal");
+                    RadioButton normal, facile;
+                    if(gameSpec.getGameSummary().getNameCode().equals("WhereIsTheColor")) {
+                        normal = new RadioButton("normal");
+                        facile = new RadioButton("easy");
+                    } else {
+                        normal = new RadioButton("Classic");
+                        facile = new RadioButton("High-Contrasts");
+                    }
+
                     normal.setToggleGroup(group);
                     normal.setSelected(true);
-                    RadioButton facile = new RadioButton("easy");
                     facile.setToggleGroup(group);
 
                     bottom.getChildren().add(facile);
